@@ -1,0 +1,58 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:TaskManagerApp"
+        x:Class="TaskManagerApp.MainWindow"
+        Title="Менеджер завдань"
+        Width="460" Height="560"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid RowDefinitions="Auto, Auto, *, Auto" Margin="20">
+        
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
+            <TextBlock Text="Менеджер завдань" FontSize="22" FontWeight="Bold" Margin="0,0,0,6"/>
+            <TextBlock x:Name="ActiveTasksCounterTextBlock" 
+                       Text="Невиконаних завдань: 0" 
+                       Foreground="Gray" 
+                       FontSize="14"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1" ColumnDefinitions="*, Auto" Margin="0,0,0,16">
+            <TextBox x:Name="NewTaskTextBox" 
+                     Grid.Column="0" 
+                     Watermark="Введіть нове завдання..." 
+                     Margin="0,0,10,0"
+                     KeyDown="OnTaskTextBoxKeyDown"/>
+            <Button Grid.Column="1" 
+                    Content="Додати" 
+                    Click="OnAddTaskClicked" 
+                    Padding="16,6"/>
+        </Grid>
+
+        <Border Grid.Row="2" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4">
+            <ListBox x:Name="TasksListBox">
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="local:TaskItem">
+                        <Grid ColumnDefinitions="Auto, *">
+                            <CheckBox Grid.Column="0" 
+                                      IsChecked="{Binding IsCompleted, Mode=TwoWay}" 
+                                      Margin="0,0,10,0"
+                                      VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" 
+                                       Text="{Binding Title}" 
+                                       VerticalAlignment="Center"
+                                       TextWrapping="Wrap"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Content="Видалити вибране" 
+                    Click="OnDeleteTaskClicked" 
+                    Background="#D32F2F" 
+                    Foreground="White" 
+                    Padding="14,6"/>
+        </StackPanel>
+    </Grid>
+</Window>
