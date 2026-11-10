@@ -2,57 +2,78 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:TaskManagerApp"
         x:Class="TaskManagerApp.MainWindow"
-        Title="Менеджер завдань"
-        Width="460" Height="560"
+        Title="Менеджер завдань (Avalonia UI)"
+        Width="580" Height="620"
+        MinWidth="480" MinHeight="400"
         WindowStartupLocation="CenterScreen">
 
-    <Grid RowDefinitions="Auto, Auto, *, Auto" Margin="20">
+    <Grid RowDefinitions="Auto, Auto, Auto, *, Auto" Margin="20">
         
+        <!-- Заголовок і лічильники -->
         <StackPanel Grid.Row="0" Margin="0,0,0,16">
-            <TextBlock Text="Менеджер завдань" FontSize="22" FontWeight="Bold" Margin="0,0,0,6"/>
+            <TextBlock Text="Менеджер завдань" FontSize="24" FontWeight="Bold" Margin="0,0,0,6"/>
             <TextBlock x:Name="ActiveTasksCounterTextBlock" 
-                       Text="Невиконаних завдань: 0" 
-                       Foreground="Gray" 
+                       Text="Усього: 0 | Невиконаних: 0 | Виконаних: 0" 
+                       Foreground="#666666" 
                        FontSize="14"/>
         </StackPanel>
 
-        <Grid Grid.Row="1" ColumnDefinitions="*, Auto" Margin="0,0,0,16">
+        <!-- Поле введення нового завдання та кнопка додавання -->
+        <Grid Grid.Row="1" ColumnDefinitions="*, Auto" Margin="0,0,0,6">
             <TextBox x:Name="NewTaskTextBox" 
                      Grid.Column="0" 
-                     Watermark="Введіть нове завдання..." 
+                     Watermark="Введіть назву нового завдання..." 
                      Margin="0,0,10,0"
                      KeyDown="OnTaskTextBoxKeyDown"/>
             <Button Grid.Column="1" 
                     Content="Додати" 
                     Click="OnAddTaskClicked" 
-                    Padding="16,6"/>
+                    Background="#1976D2"
+                    Foreground="White"
+                    FontWeight="SemiBold"
+                    Padding="16,8"/>
         </Grid>
 
-        <Border Grid.Row="2" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4">
-            <ListBox x:Name="TasksListBox">
+        <!-- Повідомлення про помилку порожнього введення -->
+        <TextBlock x:Name="ErrorMessageTextBlock"
+                   Grid.Row="2"
+                   Foreground="#D32F2F"
+                   FontSize="12"
+                   FontWeight="SemiBold"
+                   Margin="0,0,0,10"/>
+
+        <!-- Список завдань з використанням компонента TaskCard -->
+        <Border Grid.Row="3" 
+                BorderBrush="#E0E0E0" 
+                BorderThickness="1" 
+                CornerRadius="6" 
+                Padding="6"
+                Background="White">
+            <ListBox x:Name="TasksListBox" Background="Transparent">
+                <ListBox.Styles>
+                    <Style Selector="ListBoxItem">
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="Margin" Value="0,4" />
+                        <Setter Property="Background" Value="Transparent" />
+                    </Style>
+                    <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+                        <Setter Property="Background" Value="Transparent" />
+                    </Style>
+                </ListBox.Styles>
                 <ListBox.ItemTemplate>
                     <DataTemplate x:DataType="local:TaskItem">
-                        <Grid ColumnDefinitions="Auto, *">
-                            <CheckBox Grid.Column="0" 
-                                      IsChecked="{Binding IsCompleted, Mode=TwoWay}" 
-                                      Margin="0,0,10,0"
-                                      VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" 
-                                       Text="{Binding Title}" 
-                                       VerticalAlignment="Center"
-                                       TextWrapping="Wrap"/>
-                        </Grid>
+                        <local:TaskCard />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
         </Border>
 
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
-            <Button Content="Видалити вибране" 
-                    Click="OnDeleteTaskClicked" 
-                    Background="#D32F2F" 
-                    Foreground="White" 
-                    Padding="14,6"/>
-        </StackPanel>
+        <!-- Підвал із підказкою -->
+        <TextBlock Grid.Row="4" 
+                   Text="Компоненти TaskCard та TaskActionButton перевикористовуються для кожного завдання."
+                   Foreground="#888888"
+                   FontSize="12"
+                   Margin="0,12,0,0"
+                   HorizontalAlignment="Center"/>
     </Grid>
 </Window>

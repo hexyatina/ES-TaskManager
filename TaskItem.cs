@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Avalonia.Media;
 
 namespace TaskManagerApp;
 
@@ -30,8 +31,22 @@ public class TaskItem : INotifyPropertyChanged
             {
                 _isCompleted = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(StatusText));
+                OnPropertyChanged(nameof(StatusColor));
+                OnPropertyChanged(nameof(StatusButtonText));
+                OnPropertyChanged(nameof(StatusActionBrush));
             }
         }
+    }
+
+    public string StatusText => IsCompleted ? "Виконано" : "Не виконано";
+    public string StatusButtonText => IsCompleted ? "Повернути" : "Виконано";
+    public IBrush StatusColor => IsCompleted ? new SolidColorBrush(Color.Parse("#2E7D32")) : new SolidColorBrush(Color.Parse("#E65100"));
+    public IBrush StatusActionBrush => IsCompleted ? new SolidColorBrush(Color.Parse("#757575")) : new SolidColorBrush(Color.Parse("#2E7D32"));
+
+    public void ToggleCompleted()
+    {
+        IsCompleted = !IsCompleted;
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
